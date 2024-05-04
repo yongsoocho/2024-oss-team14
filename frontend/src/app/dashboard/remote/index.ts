@@ -17,3 +17,37 @@ export function useGetProjectListQuery() {
     queryFn: () => getProjectList(),
   });
 }
+
+export type ReportedError = {
+  id: number;
+  project: string;
+  tags: string[];
+  message: string;
+  statusCode: number;
+  stack: string;
+  solution: string;
+};
+async function getReportedErrorList() {
+  return new Promise<ReportedError[]>((res) =>
+    res([
+      {
+        id: 1,
+        project: "cautry web view",
+        tags: ["python", "javascript"],
+        message: "error message",
+        statusCode: 500,
+        stack: "fail to reference",
+        solution: "from chat gpt",
+      },
+      {
+        id: 2,
+        project: "cautry web view",
+        tags: ["python", "javascript"],
+        message: "error message",
+        statusCode: 500,
+        stack: "fail to reference",
+        solution: "from chat gpt",
+      },
+    ])
+  );
+}
