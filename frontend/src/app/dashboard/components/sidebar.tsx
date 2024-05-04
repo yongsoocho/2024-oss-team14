@@ -3,10 +3,10 @@
 import { Box, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import React from "react";
-import { Project, useGetProjectListQuery } from "../remote";
+import { useGetProjectListQuery } from "../remote";
 import { useAtom } from "jotai";
-import { atomFamily, atomWithStorage } from "jotai/utils";
 import SSRSafeSuspense from "@/components/SSRSafe";
+import { selectedProjectAtom } from "../store/selected-project";
 
 export default function Sidebar() {
   return (
@@ -41,10 +41,6 @@ function ProjectInfo() {
   );
 }
 
-const selectedProjectAtom = atomFamily(
-  (project: Project) => atomWithStorage("selectedProject", project),
-  (a, b) => a.projectId === b.projectId
-);
 function ProjectList() {
   const products = useGetProjectListQuery().data;
   const [selectedProduct, setSelectedProduct] = useAtom(
