@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
+import ReactQueryProviders from "@/lib/react-query";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,7 +15,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          height: "100vh",
+        }}
+      >
+        <ReactQueryProviders>
+          <Theme>
+            <div
+              style={{
+                maxWidth: "1920px",
+                height: "100%",
+                width: "100%",
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              {children}
+            </div>
+          </Theme>
+        </ReactQueryProviders>
+      </body>
     </html>
   );
 }
