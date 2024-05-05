@@ -49,11 +49,11 @@ function ProjectList() {
 
   return (
     <>
-      <Text size="4" style={{ color: "white" }} weight="bold">
+      <Text size="6" style={{ color: "white" }} weight="bold">
         Projects
       </Text>
       <Box height={"16px"} />
-      <Flex direction="column" gap={"8px"}>
+      <Flex direction="column" gap={"12px"}>
         {products.map((p) => {
           const isSelected = p.projectId === selectedProduct.projectId;
           const color = isSelected === true ? "white" : "gray";

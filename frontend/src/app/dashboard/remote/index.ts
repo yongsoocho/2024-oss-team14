@@ -44,10 +44,34 @@ async function getReportedErrorList() {
         project: "cautry web view",
         tags: ["python", "javascript"],
         message: "error message",
-        statusCode: 500,
+        statusCode: 400,
+        stack: "fail to reference",
+        solution: "from chat gpt",
+      },
+      {
+        id: 3,
+        project: "cautry web view",
+        tags: ["python", "javascript"],
+        message: "error message",
+        statusCode: 401,
+        stack: "fail to reference",
+        solution: "from chat gpt",
+      },
+      {
+        id: 4,
+        project: "cautry web view",
+        tags: ["python", "javascript"],
+        message: "error message",
+        statusCode: 404,
         stack: "fail to reference",
         solution: "from chat gpt",
       },
     ])
   );
+}
+export function useGetReportedErrorListQuery() {
+  return useSuspenseQuery({
+    queryKey: ["getReportedErrorList"],
+    queryFn: () => getReportedErrorList(),
+  });
 }

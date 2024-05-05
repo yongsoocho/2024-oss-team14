@@ -2,6 +2,7 @@ import React from "react";
 import ReportedErrorList from "./reported-error-list";
 import Search from "./search";
 import { Flex, Separator } from "@radix-ui/themes";
+import SSRSafeSuspense from "@/components/SSRSafe";
 
 export default function Main() {
   return (
@@ -10,9 +11,11 @@ export default function Main() {
         <Search />
       </div>
       <Separator my="5" size="4" />
-      <div style={{ padding: "0px 40px" }}>
-        <ReportedErrorList />
-      </div>
+      <SSRSafeSuspense fallback={null}>
+        <div style={{ padding: "0px 40px" }}>
+          <ReportedErrorList />
+        </div>
+      </SSRSafeSuspense>
     </Flex>
   );
 }
