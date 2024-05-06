@@ -1,0 +1,10 @@
+[
+  {
+    "code": "",
+    "tags": [""],
+    "message": "error message",
+    "statusCode": 500,
+    "stack": "...",
+    "solution": ""
+  }
+]
