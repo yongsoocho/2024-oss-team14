@@ -1,11 +1,11 @@
-import { OpenAI } from "openai";
-const config = require("./config.json");
-const openai = new OpenAI(config["OPENAI_API_KEY"]);
+const { OpenAI } = require("openai");
+const config = require("../config/config.json");
+const openai = new OpenAI({ apiKey: config["OPENAI_API_KEY"] });
 
 /**
  * @function chatgpt에서 솔루션을 가져옵니다.
  */
-export async function hook() {
+async function hook() {
   try {
     const completion = await openai.complete({
       engine: "davinci-codex",
@@ -23,7 +23,7 @@ export async function hook() {
 /**
  * @class 애플리케이션 에러
  */
-export class CustomError extends Error {
+class CustomError extends Error {
   /**
    * @type {string}
    * @description error stack.
@@ -42,3 +42,8 @@ export class CustomError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
+
+module.exports = {
+  hook,
+  CustomError,
+};

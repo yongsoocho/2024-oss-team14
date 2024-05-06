@@ -1,15 +1,15 @@
-const RandomError = require("./error");
+const { CustomError } = require("../pipe/error");
 const d = require("./data.json");
 
 class Repository {
   data = d;
 
   findOneById(id) {
-    if (!id) throw new RandomError("data not found", 404);
+    if (!id) throw new CustomError("data not found", 404);
 
     const user = this.data.find((element) => element.id == id);
 
-    if (!user) throw new RandomError("bad request", 400);
+    if (!user) throw new CustomError("bad request", 400);
 
     return user;
   }
