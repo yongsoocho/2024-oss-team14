@@ -9,7 +9,7 @@
 ### 2024년 04월 19일 제안서 발표
 
 - [x] Figma UI 제작
-- [] React 페이지 제작
+- [ ] React 페이지 제작
 - [x] 발표 자료 제작
 
 ### 2024년 04월 24일 발표 리뷰
@@ -20,7 +20,7 @@
 ```
 schema data {
   "project": "cautry web view",
-  "tag": ["node.js", "javascript"],
+  "tags": ["node.js", "javascript"],
   "message": "error message",
   "statusCode": 500,
   "stack": "...",
