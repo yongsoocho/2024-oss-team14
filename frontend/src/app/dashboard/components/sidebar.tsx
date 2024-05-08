@@ -32,7 +32,7 @@ export default function Sidebar() {
 function ProjectInfo() {
   return (
     <Flex gap={"12px"}>
-      <Image src="/cau-logo.png" alt="" width="48" height={48} />
+      <img src="/cau-logo.png" alt="" width="48" height={48} />
       <Flex direction="column" gap={"4px"} style={{ paddingRight: 8 }}>
         <Text style={{ color: "white" }}>Open Source Inc.</Text>
         <Text style={{ color: "lightgray" }}>team 14</Text>
