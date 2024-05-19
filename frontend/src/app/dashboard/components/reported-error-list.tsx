@@ -1,7 +1,15 @@
 "use client";
 
-import { Table } from "@radix-ui/themes";
-import { ReportedError, useGetReportedErrorListQuery } from "../remote";
+import { Button, Flex, Table, TextArea } from "@radix-ui/themes";
+import {
+  ReportedError,
+  reSolutionError,
+  resolveError,
+  useGetReportedErrorListQuery,
+} from "../remote";
+import React, { useState } from "react";
+import { Dialog } from "@/components/Dialog/Dialog";
+import { useLoading } from "@/hooks/useLoading";
 
 function extractKeys<T extends Record<string, unknown>>(
   obj: T,
@@ -41,10 +49,21 @@ export default function ReportedErrorList() {
         <Table.Body>
           {data.map((d) => {
             const c = extractKeys(d, tableKeys);
-            const values = Object.values(c);
+            const entries = Object.entries(c);
             return (
               <Table.Row key={d.id}>
-                {values.map((v, index) => {
+                {entries.map(([k, v], index) => {
+                  if (k === "solution") {
+                    return (
+                      <Table.Cell key={index}>
+                        <div>{JSON.stringify(v)}</div>
+                        <Flex gap={"2"}>
+                          <ResolveButton errorId={d.id} />
+                          <RePromptButton errorId={d.id} />
+                        </Flex>
+                      </Table.Cell>
+                    );
+                  }
                   if (index === 0) {
                     return (
                       <Table.RowHeaderCell key={index}>
@@ -62,5 +81,58 @@ export default function ReportedErrorList() {
         </Table.Body>
       </Table.Root>
     </div>
+  );
+}
+
+function ResolveButton({ errorId }: { errorId: number }) {
+  const refetch = useGetReportedErrorListQuery().refetch;
+  const [loading, startLoading] = useLoading();
+
+  return (
+    <Button
+      type="button"
+      loading={loading}
+      onClick={() => {
+        startLoading(
+          (async () => {
+            await resolveError({ errorId });
+            await refetch();
+          })()
+        );
+      }}
+    >
+      Resolve
+    </Button>
+  );
+}
+
+function RePromptButton({ errorId }: { errorId: number }) {
+  const [value, setValue] = useState("");
+  const refetch = useGetReportedErrorListQuery().refetch;
+  const [loading, startLoading] = useLoading();
+  return (
+    <>
+      <Dialog
+        triggerComponent={
+          <Button type="button" color="ruby" loading={loading}>
+            Re-Prompt
+          </Button>
+        }
+        confirmButtonTitle="Re-Prompt"
+        title="message to ChatGPT"
+        description="더 좋은 답변을 받기 위해서 메시지를 추가해주세요"
+        onConfirm={() => {
+          startLoading(
+            (async () => {
+              await reSolutionError({ errorId, promptMessage: value });
+              await refetch();
+              setValue("");
+            })()
+          );
+        }}
+      >
+        <TextArea value={value} onChange={(e) => setValue(e.target.value)} />
+      </Dialog>
+    </>
   );
 }

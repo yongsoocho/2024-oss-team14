@@ -1,3 +1,5 @@
+"use client";
+
 import { isServer } from "@/utils/isServer";
 import React, {
   ComponentProps,
@@ -9,9 +11,9 @@ import React, {
 
 export default function SSRSafeSuspense({
   children,
-  fallback,
+  fallback = null,
 }: PropsWithChildren<{
-  fallback: ComponentProps<typeof Suspense>["fallback"];
+  fallback?: ComponentProps<typeof Suspense>["fallback"];
 }>) {
   const [isMount, setIsMount] = useState(false);
   useEffect(() => {
