@@ -1,8 +1,10 @@
 const { Router } = require("express");
 const { CustomError } = require("../pipe/error");
+const Repository = require("../database/repository");
 
 function Controller() {
   const router = Router();
+  const repository = new Repository();
 
   router.get("/", (req, res, next) => {
     res.status(200).json({

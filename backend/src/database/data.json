@@ -1,10 +1,22 @@
 [
   {
-    "code": "",
-    "tags": [""],
+    "id": 1,
+    "project": "cautry web view",
+    "tags": ["python", "javascript"],
     "message": "error message",
     "statusCode": 500,
-    "stack": "...",
-    "solution": ""
+    "stack": "fail to reference",
+    "solution": "from chat gpt",
+    "isResolved": false
+  },
+  {
+    "id": 2,
+    "project": "cautry web view",
+    "tags": ["python", "javascript"],
+    "message": "error message",
+    "statusCode": 500,
+    "stack": "fail to reference",
+    "solution": "from chat gpt",
+    "isResolved": false
   }
 ]
