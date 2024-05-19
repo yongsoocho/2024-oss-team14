@@ -22,27 +22,29 @@
 - [x] <s>ChatGPT API 연결</s> <em>5.19 완료</em>
 
 ```
-변경 전 4.19
-schema data {
-  "project": "cautry web view",
-  "tags": ["node.js", "javascript"],
-  "message": "error message",
-  "statusCode": 500,
-  "stack": "...",
-  "solution": "from chat gpt"
-}
+// 변경 전 4.19
+const oldDataSchema = {
+  project: "cautry web view",
+  tags: ["node.js", "javascript"],
+  message: "error message",
+  statusCode: 500,
+  stack: "...",
+  solution: "from chat gpt",
+};
+```
 
-<strong>변경 후 5.19
-schema data {
-  "id": 1,
-  "project": "cautry web view",
-  "tags": ["python", "FastAPI", "Node.js", "Next.js"],
-  "message": "error message",
-  "statusCode": 500,
-  "stack": "fail to reference",
-  "solution": "from chat gpt",
-  "isResolved": false
-}</strong>
+```javascript
+// 변경 후 5.19
+const oldNewSchema = {
+  id: 1,
+  project: "cautry web view",
+  tags: ["python", "FastAPI", "Node.js", "Next.js"],
+  message: "error message",
+  statusCode: 500,
+  stack: "fail to reference",
+  solution: "from chat gpt",
+  isResolved: false,
+};
 ```
 
 > <s>중간고사 04월 26일 금요일</s>
