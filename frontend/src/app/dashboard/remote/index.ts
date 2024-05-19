@@ -1,4 +1,5 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { client } from "@/remote";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export type Project = { projectId: number; tags: string[]; name: string };
 async function getProjectList() {
@@ -74,4 +75,20 @@ export function useGetReportedErrorListQuery() {
     queryKey: ["getReportedErrorList"],
     queryFn: () => getReportedErrorList(),
   });
+}
+
+export function resolveError({ errorId }: { errorId: number }) {
+  return new Promise((res) => res(true));
+  // return client.post(`/errors/resolve`);
+}
+
+export function reSolutionError({
+  errorId,
+  promptMessage,
+}: {
+  errorId: number;
+  promptMessage: string;
+}) {
+  return new Promise((res) => res(true));
+  // return client.post(`/errors/fail`);
 }

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 import ReactQueryProviders from "@/lib/react-query";
+import { ToastProvider, ToastViewport } from "@radix-ui/react-toast";
+import SSRSafeSuspense from "@/components/SSRSafe";
 
 export const metadata: Metadata = {
   title: "Create Next App",
