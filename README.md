@@ -4,9 +4,9 @@
 
 ![concept](./image.PNG)
 
-![concept](./main.PNG)
+![concept](./main.png)
 
-![concept](./arch.PNG)
+![concept](./arch.png)
 
 ## Todo
 
