@@ -1,11 +1,17 @@
-// import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Button, Flex, TextField } from "@radix-ui/themes";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import React, { useRef } from "react";
+
+const searchQueryAtom = atom("");
+export function useGetSearchQuery() {
+  return useAtomValue(searchQueryAtom);
+}
 
 export default function Search() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const setSearchQuery = useSetAtom(searchQueryAtom);
   const searchKeyword = ({ keyword }: { keyword: string }) => {
-    // filter
+    setSearchQuery(keyword);
   };
   return (
     <Flex gap={"16px"}>

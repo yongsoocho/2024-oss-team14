@@ -1,15 +1,17 @@
 "use client";
 
-import { Button, Flex, Table, TextArea } from "@radix-ui/themes";
+import { Badge, Button, Flex, Table, TextArea } from "@radix-ui/themes";
 import {
   ReportedError,
   reSolutionError,
   resolveError,
   useGetReportedErrorListQuery,
 } from "../remote";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Dialog } from "@/components/Dialog/Dialog";
 import { useLoading } from "@/hooks/useLoading";
+import { useGetSearchQuery } from "./search";
+import { ResolvedStatus, useGetResolvedFilter } from "./DropdownFilter";
 
 function extractKeys<T extends Record<string, unknown>>(
   obj: T,
@@ -29,8 +31,37 @@ function extractKeys<T extends Record<string, unknown>>(
 type ErrorKeys = (keyof ReportedError)[];
 const tableKeys: ErrorKeys = ["message", "statusCode", "stack", "solution"];
 
-export default function ReportedErrorList() {
+function useFilteredErrorList() {
   const data = useGetReportedErrorListQuery().data;
+  const searchQuery = useGetSearchQuery();
+  const resolvedFilter = useGetResolvedFilter();
+
+  return useMemo(() => {
+    return filterResolvedStatus(filterQuery(data, searchQuery), resolvedFilter);
+  }, [searchQuery, resolvedFilter]);
+}
+function filterQuery<T extends unknown>(arr: T[], searchQuery: string) {
+  return arr.filter((el) => JSON.stringify(el).includes(searchQuery));
+}
+function filterResolvedStatus(
+  arr: ReportedError[],
+  resolvedStatus: ResolvedStatus
+) {
+  if (resolvedStatus === "all") {
+    return arr;
+  }
+  if (resolvedStatus === "resolved") {
+    return arr.filter((el) => el.isResolved === true);
+  }
+
+  if (resolvedStatus === "unresolved") {
+    return arr.filter((el) => el.isResolved === false);
+  }
+  return arr;
+}
+
+export default function ReportedErrorList() {
+  const data = useFilteredErrorList();
 
   const headers = (Object.keys(data[0]) as ErrorKeys).filter((c) =>
     tableKeys.includes(c)
@@ -57,10 +88,14 @@ export default function ReportedErrorList() {
                     return (
                       <Table.Cell key={index}>
                         <div>{JSON.stringify(v)}</div>
-                        <Flex gap={"2"}>
-                          <ResolveButton errorId={d.id} />
-                          <RePromptButton errorId={d.id} />
-                        </Flex>
+                        {d.isResolved !== true ? (
+                          <Flex gap={"2"}>
+                            <ResolveButton errorId={d.id} />
+                            <RePromptButton errorId={d.id} />
+                          </Flex>
+                        ) : (
+                          <Badge color="green">Resolved!</Badge>
+                        )}
                       </Table.Cell>
                     );
                   }
