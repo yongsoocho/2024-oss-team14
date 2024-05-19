@@ -1,17 +1,62 @@
+const path = require("path");
 const { CustomError } = require("../pipe/error");
 const d = require("./data.json");
+const fs = require("fs");
 
 class Repository {
   data = d;
 
+  save(message, statusCode, stack, solution) {
+    try {
+      const newError = {
+        id: d[d.length],
+        project: "[OSS payment 팀] 결제",
+        tags: ["python", "Next.js"],
+        message: message ?? "internal server error",
+        statusCode: statusCode ?? 500,
+        stack: stack ?? "fail to reference",
+        solution: solution ?? "-",
+        isResolved: false,
+      };
+
+      const filePath = path.join(__dirname, "data.json");
+      d = [...d, newError];
+
+      fs.writeFileSync(filePath, d);
+
+      return newError;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  resolve(id) {
+    const result = {};
+    const filePath = path.join(__dirname, "data.json");
+    const d = d.map((item) => {
+      if (item.id == id) {
+        const result = {
+          ...item,
+          isResolved: true,
+        };
+        return result;
+      } else {
+        return item;
+      }
+    });
+
+    fs.writeFileSync(filePath, d);
+
+    return result;
+  }
+
   findMany(page = 1) {
     try {
-      start = 10 * (page - 1);
-      end = 10 * page;
-
-      result = d.slice(start, end);
-
-      return result;
+      // start = 10 * (page - 1);
+      // end = 10 * page;
+      // result = d.slice(start, end);
+      // return result;
+      return d;
     } catch (error) {
       CustomError(error.message, 500, error.stack);
     }

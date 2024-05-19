@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { CustomError } = require("../pipe/error");
+const { CustomError, getSolutionFromGPT } = require("../pipe/error");
 const Repository = require("../database/repository");
 
 function Controller() {
@@ -14,25 +14,49 @@ function Controller() {
   });
 
   router.get("/error-list", (req, res, next) => {
+    const result = repository.findMany();
+
     res.status(200).json({
       statusCode: 200,
-      message: "모든 에러를 내려준다.",
+      data: result,
     });
   });
 
-  router.post("/errors", (req, res, next) => {
+  router.post("/errors/py", (req, res, next) => {
     try {
-      throw new CustomError("test error", 500);
+      const { code } = req.body;
+
+      /** pass */
+      const newError = repository.save();
+
+      return code;
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/errors/js", (req, res, next) => {
+    try {
+      const { message, statusCode, stack } = req.body;
+
+      const newError = repository.save(message, +statusCode, stack);
+
+      return newError;
     } catch (error) {
       next(error);
     }
   });
 
   router.post("/errors/resolve", (req, res, next) => {
-    res.status(200).json({
-      statusCode: 200,
-      message: "에러 resolve 하고 아카이브 하는 api",
-    });
+    try {
+      const { id } = req.body;
+
+      const resolvedError = repository.resolve(+id);
+
+      return resolvedError;
+    } catch (error) {
+      next(error);
+    }
   });
 
   router.post("/errors/re-solution", (req, res, next) => {
@@ -40,6 +64,11 @@ function Controller() {
       statusCode: 200,
       message: "solution을 다시 받는 api",
     });
+  });
+
+  router.get("/test/gpt", async (_, res, __) => {
+    const result = await getSolutionFromGPT("python", "out of index");
+    return res.status(200).json(result);
   });
 
   return router;
