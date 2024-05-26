@@ -27,6 +27,7 @@ export type ReportedError = {
   statusCode: number;
   stack: string;
   solution: string;
+  isResolved: boolean;
 };
 async function getReportedErrorList() {
   return new Promise<ReportedError[]>((res) =>
@@ -39,6 +40,7 @@ async function getReportedErrorList() {
         statusCode: 500,
         stack: "fail to reference",
         solution: "from chat gpt",
+        isResolved: false,
       },
       {
         id: 2,
@@ -48,6 +50,7 @@ async function getReportedErrorList() {
         statusCode: 400,
         stack: "fail to reference",
         solution: "from chat gpt",
+        isResolved: false,
       },
       {
         id: 3,
@@ -57,6 +60,7 @@ async function getReportedErrorList() {
         statusCode: 401,
         stack: "fail to reference",
         solution: "from chat gpt",
+        isResolved: true,
       },
       {
         id: 4,
@@ -66,6 +70,7 @@ async function getReportedErrorList() {
         statusCode: 404,
         stack: "fail to reference",
         solution: "from chat gpt",
+        isResolved: true,
       },
     ])
   );
