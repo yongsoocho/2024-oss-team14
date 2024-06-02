@@ -2,16 +2,21 @@ const path = require("path");
 const { CustomError } = require("../pipe/error");
 const d = require("./data.json");
 const fs = require("fs");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
+// const objectid = require("objectid");
 
 class Repository {
   con = this.connect();
 
   connect() {
     const url = "mongodb://localhost:27017";
-    const client = new MongoClient(url);
+    const client = new MongoClient(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     const db = client.db("oss");
-    const collection = db.collection("errors");
+    const collection = db.collection("test");
+    // const collection = db.collection("dev");
     // const collection = db.collection("prd");
     return collection;
   }
@@ -23,7 +28,6 @@ class Repository {
 
   async save(message, statusCode, stack, solution) {
     const newError = {
-      id: d[d.length],
       project: "[OSS payment 팀] 결제",
       tags: ["python", "Next.js"],
       message: message ?? "internal server error",
@@ -39,7 +43,7 @@ class Repository {
 
   async resolve(id) {
     const result = await this.con.updateOne(
-      { _id: id },
+      { _id: new ObjectId(id) },
       { $set: { isResolved: true } }
     );
     return result;
@@ -51,9 +55,8 @@ class Repository {
   }
 
   async findOneById(id) {
-    const result = await this.con.find({ _id: id }).toArray();
-    if (result.length > 0) return result[0];
-    else return {};
+    const result = await this.con.findOne({ _id: new ObjectId(id) });
+    return result;
   }
 
   async findOneByQueryWhereStack(query) {
@@ -71,7 +74,15 @@ class Repository {
   }
 }
 
-// const r = new Repository();
-// r.test();
+const r = new Repository();
+console.log("save ", r.save("t", "e", "s", "t"));
+console.log("resolve ", r.resolve("665c02d4a82372cb03952070"));
+console.log("findMany ", r.findMany());
+console.log("findOneById ", r.findOneById("665c02d4a82372cb03952070"));
+console.log("findOneByQueryWhereStack ", r.findOneByQueryWhereStack("hi"));
+console.log(
+  "findOneByQueryWhereSolution ",
+  r.findOneByQueryWhereSolution("hi")
+);
 
 module.exports = Repository;
