@@ -12,7 +12,7 @@ export function CodeEditor({
     <Editor
       height="500px"
       defaultLanguage="python"
-      defaultValue="// some comment"
+      defaultValue={`print("Hello World")`}
       onMount={(editor) => {
         editorRef.current = editor;
       }}
