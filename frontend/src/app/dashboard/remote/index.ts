@@ -19,6 +19,11 @@ export function useGetProjectListQuery() {
   });
 }
 
+type ServerResponse<T> = {
+  data: T;
+  statusCode: number;
+};
+
 export type ReportedError = {
   id: number;
   project: string;
@@ -30,61 +35,21 @@ export type ReportedError = {
   isResolved: boolean;
 };
 async function getReportedErrorList() {
-  return new Promise<ReportedError[]>((res) =>
-    res([
-      {
-        id: 1,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 500,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: false,
-      },
-      {
-        id: 2,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 400,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: false,
-      },
-      {
-        id: 3,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 401,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: true,
-      },
-      {
-        id: 4,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 404,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: true,
-      },
-    ])
-  );
+  return client.get<ServerResponse<ReportedError[]>>("/error-list");
 }
 export function useGetReportedErrorListQuery() {
   return useSuspenseQuery({
     queryKey: ["getReportedErrorList"],
     queryFn: () => getReportedErrorList(),
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 }
 
 export function resolveError({ errorId }: { errorId: number }) {
-  return new Promise((res) => res(true));
-  // return client.post(`/errors/resolve`);
+  return client.post(`/errors/resolve`, { id: errorId });
 }
 
 export function reSolutionError({
@@ -94,6 +59,12 @@ export function reSolutionError({
   errorId: number;
   promptMessage: string;
 }) {
-  return new Promise((res) => res(true));
-  // return client.post(`/errors/fail`);
+  return client.post(`/errors/re-solution`, {
+    errorId,
+    promptMessage,
+  });
+}
+
+export function sendPyCode({ code }: { code: string }) {
+  return client.post(`/errors/py`, { code });
 }
