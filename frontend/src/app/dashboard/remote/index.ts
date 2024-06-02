@@ -60,8 +60,8 @@ export function reSolutionError({
   promptMessage: string;
 }) {
   return client.post(`/errors/re-solution`, {
-    errorId,
-    promptMessage,
+    id: errorId,
+    feedback: promptMessage,
   });
 }
 
