@@ -19,6 +19,11 @@ export function useGetProjectListQuery() {
   });
 }
 
+type ServerResponse<T> = {
+  data: T;
+  statusCode: number;
+};
+
 export type ReportedError = {
   id: number;
   project: string;
@@ -30,12 +35,16 @@ export type ReportedError = {
   isResolved: boolean;
 };
 async function getReportedErrorList() {
-  return client.get("/error-list");
+  return client.get<ServerResponse<ReportedError[]>>("/error-list");
 }
 export function useGetReportedErrorListQuery() {
   return useSuspenseQuery({
     queryKey: ["getReportedErrorList"],
     queryFn: () => getReportedErrorList(),
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 }
 
@@ -54,4 +63,8 @@ export function reSolutionError({
     errorId,
     promptMessage,
   });
+}
+
+export function sendPyCode({ code }: { code: string }) {
+  return client.post(`/errors/py`, { code });
 }
