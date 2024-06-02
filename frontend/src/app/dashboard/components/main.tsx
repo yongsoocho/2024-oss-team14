@@ -4,7 +4,6 @@ import Search from "./search";
 import { Box, Flex, Separator } from "@radix-ui/themes";
 import SSRSafeSuspense from "@/components/SSRSafe";
 import DropdownFilter from "./DropdownFilter";
-import { CodeEditorWithDialog } from "./CodeEditor";
 
 export default function Main() {
   return (
@@ -18,7 +17,6 @@ export default function Main() {
       <SSRSafeSuspense fallback={null}>
         <div style={{ padding: "0px 40px" }}>
           <ReportedErrorList />
-          <CodeEditorWithDialog />
         </div>
       </SSRSafeSuspense>
     </Flex>
