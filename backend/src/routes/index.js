@@ -9,6 +9,22 @@ function Controller() {
   const router = Router();
   const repository = new Repository();
 
+  async function getSolution({ message, type, stack }) {
+    const errorList = await repository.findMany();
+    const existOne = errorList.find(
+      (e) => e.message === message && e.type === type
+    );
+    const isExist = existOne != null;
+
+    if (isExist === true) {
+      return existOne.solution;
+    }
+
+    const newSolution = await getSolutionFromGPT("python", stack);
+
+    return newSolution;
+  }
+
   router.get("/", (req, res, next) => {
     res.status(200).json({
       statusCode: 200,
@@ -25,49 +41,49 @@ function Controller() {
     });
   });
 
-  router.post("/errors/py", (req, res, next) => {
+  router.post("/errors/py", async (req, res, next) => {
     try {
       const { code } = req.body;
       const pythonFile = path.join(__dirname, "test.py");
 
       fs.readFile(pythonFile, "utf8", (err, data) => {
         if (err) {
-          console.error(err);
           throw new CustomError("panic python parse error", 500, err.stack);
-          return;
         }
 
         const result = data.replace("{{code}}", code);
 
         fs.writeFile(pythonFile, result, "utf8", (err) => {
           if (err) {
-            console.error(err);
             throw new CustomError(
               "panic python generate error",
               500,
               err.stack
             );
-            return;
           }
         });
       });
 
       /** pass */
-      exec(`python ${pythonFile}`, (error, stdout, stderr) => {
+      exec(`python ${pythonFile}`, async (error, stdout, stderr) => {
         fs.writeFile(pythonFile, "{{code}}", "utf8", (err) => {
           if (err) {
-            console.error(err);
             throw new CustomError(
               "panic python generate error",
               500,
               err.stack
             );
-            return;
           }
         });
 
         /** to be */
         if (error) {
+          const solution = await getSolution({
+            message: error.message,
+            type: "python",
+            stack: stderr,
+          });
+          await repository.save(error.message, 500, stderr, solution, "python");
           return res.status(500).json({
             statusCode: 500,
             data: stderr,
@@ -75,6 +91,12 @@ function Controller() {
         }
 
         if (stderr) {
+          const solution = await getSolution({
+            message: stderr,
+            type: "python",
+            stack: stderr,
+          });
+          await repository.save(stderr, 500, stderr, solution, "python");
           return res.status(500).json({
             statusCode: 500,
             data: stderr,
@@ -100,7 +122,6 @@ function Controller() {
         if (err) {
           console.error(err);
           throw new CustomError("panic javascript parse error", 500, err.stack);
-          return;
         }
 
         const result = data.replace("{{code}}", code);
@@ -113,7 +134,6 @@ function Controller() {
               500,
               err.stack
             );
-            return;
           }
         });
       });
@@ -128,7 +148,6 @@ function Controller() {
               500,
               err.stack
             );
-            return;
           }
         });
 
@@ -170,7 +189,6 @@ function Controller() {
   });
 
   router.post("/errors/re-solution", async (req, res, next) => {
-    // const { type, solution, feedback } = req.body;
     const { id, feedback } = req.body;
     const doc = await repository.findOneById(id);
     const type = doc.type;
@@ -184,6 +202,7 @@ function Controller() {
         feedback +
         "이 반영되도록 알려줘"
     );
+    await repository.updateSolution(id, reSolution);
 
     res.status(200).json({
       statusCode: 200,

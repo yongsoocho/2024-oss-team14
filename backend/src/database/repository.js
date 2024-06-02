@@ -46,6 +46,14 @@ class Repository {
     return result;
   }
 
+  async updateSolution(id, solution) {
+    const result = await this.con.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { solution } }
+    );
+    return result;
+  }
+
   async findMany(page = 1) {
     const result = await this.con.find({}).toArray();
     return result;
