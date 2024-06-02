@@ -23,10 +23,10 @@ class Repository {
     console.log(result);
   }
 
-  async save(message, statusCode, stack, solution) {
+  async save(message, statusCode, stack, solution, type = "python") {
     const newError = {
       project: "[OSS payment 팀] 결제",
-      tags: ["python", "Next.js"],
+      tags, // "python" | "node"
       message: message ?? "internal server error",
       statusCode: statusCode ?? 500,
       stack: stack ?? "fail to reference",

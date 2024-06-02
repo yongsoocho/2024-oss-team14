@@ -169,8 +169,12 @@ function Controller() {
     }
   });
 
-  router.post("/errors/re-solution", (req, res, next) => {
-    const { type, solution, feedback } = req.body;
+  router.post("/errors/re-solution", async (req, res, next) => {
+    // const { type, solution, feedback } = req.body;
+    const { id, feedback } = req.body;
+    const doc = await repository.findOneById(id);
+    const type = doc.type;
+    const solution = doc.solution;
     const reSolution = getSolutionFromGPT(
       type,
       stack +
