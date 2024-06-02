@@ -30,50 +30,7 @@ export type ReportedError = {
   isResolved: boolean;
 };
 async function getReportedErrorList() {
-  return new Promise<ReportedError[]>((res) =>
-    res([
-      {
-        id: 1,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 500,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: false,
-      },
-      {
-        id: 2,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 400,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: false,
-      },
-      {
-        id: 3,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 401,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: true,
-      },
-      {
-        id: 4,
-        project: "cautry web view",
-        tags: ["python", "javascript"],
-        message: "error message",
-        statusCode: 404,
-        stack: "fail to reference",
-        solution: "from chat gpt",
-        isResolved: true,
-      },
-    ])
-  );
+  return client.get("/error-list");
 }
 export function useGetReportedErrorListQuery() {
   return useSuspenseQuery({
@@ -83,8 +40,7 @@ export function useGetReportedErrorListQuery() {
 }
 
 export function resolveError({ errorId }: { errorId: number }) {
-  return new Promise((res) => res(true));
-  // return client.post(`/errors/resolve`);
+  return client.post(`/errors/resolve`, { id: errorId });
 }
 
 export function reSolutionError({
@@ -94,6 +50,8 @@ export function reSolutionError({
   errorId: number;
   promptMessage: string;
 }) {
-  return new Promise((res) => res(true));
-  // return client.post(`/errors/fail`);
+  return client.post(`/errors/fail`, {
+    errorId,
+    promptMessage,
+  });
 }
