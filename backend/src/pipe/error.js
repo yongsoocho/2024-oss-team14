@@ -3,7 +3,7 @@ const config = require("../config/config.json");
 const openai = new OpenAI({ apiKey: config["OPENAI_API_KEY"] });
 
 /**
- * @param {string} [message="python"|"node.js"] - 프롬프트 타입
+ * @param {string} [message="python"|"node"] - 프롬프트 타입
  * @param {string} message - 에러메세지 전달
  */
 function generatePrompt(type, message) {
@@ -36,7 +36,7 @@ function generatePrompt(type, message) {
       },
       { role: "user", content: message },
     ];
-  } else if (type == "node.js") {
+  } else if (type == "node") {
     return [
       {
         role: "system",
@@ -58,7 +58,7 @@ function generatePrompt(type, message) {
 
 /**
  * @function chatgpt에서 솔루션을 가져옵니다.
- * @param {string} [message="python"|"node.js"] - 프롬프트 타입
+ * @param {string} [message="python"|"node"] - 프롬프트 타입
  * @param {string} message - 에러메세지 전달
  */
 async function getSolutionFromGPT(type = "python", message) {

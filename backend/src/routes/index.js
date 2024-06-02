@@ -20,7 +20,7 @@ function Controller() {
       return existOne.solution;
     }
 
-    const newSolution = await getSolutionFromGPT("python", stack);
+    const newSolution = await getSolutionFromGPT(type, stack);
 
     return newSolution;
   }
@@ -139,7 +139,7 @@ function Controller() {
       });
 
       /** pass */
-      exec(`node ${javascriptFile}`, (error, stdout, stderr) => {
+      exec(`node ${javascriptFile}`,async  async (error, stdout, stderr) => {
         fs.writeFile(javascriptFile, "{{code}}", "utf8", (err) => {
           if (err) {
             console.error(err);
@@ -153,6 +153,12 @@ function Controller() {
 
         /** to be */
         if (error) {
+          const solution = await getSolution({
+            message: error.message,
+            type: "node",
+            stack: stderr,
+          });
+          await repository.save(error.message, 500, stderr, solution, "node");
           return res.status(500).json({
             statusCode: 500,
             data: stderr,
@@ -160,6 +166,12 @@ function Controller() {
         }
 
         if (stderr) {
+          const solution = await getSolution({
+            message: stderr,
+            type: "node",
+            stack: stderr,
+          });
+          await repository.save(stderr, 500, stderr, solution, "node");
           return res.status(500).json({
             statusCode: 500,
             data: stderr,
