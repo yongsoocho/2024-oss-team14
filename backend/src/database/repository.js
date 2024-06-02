@@ -17,7 +17,7 @@ class Repository {
   }
 
   async test() {
-    const result = await this.con.find({});
+    const result = await this.con.find({}).toArray();
     console.log(result);
   }
 
