@@ -32,7 +32,8 @@ type ErrorKeys = (keyof ReportedError)[];
 const tableKeys: ErrorKeys = ["message", "statusCode", "stack", "solution"];
 
 function useFilteredErrorList() {
-  const data = useGetReportedErrorListQuery().data;
+  const data = useGetReportedErrorListQuery().data.data.data;
+
   const searchQuery = useGetSearchQuery();
   const resolvedFilter = useGetResolvedFilter();
 
