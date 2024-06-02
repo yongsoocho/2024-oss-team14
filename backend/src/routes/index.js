@@ -16,8 +16,8 @@ function Controller() {
     });
   });
 
-  router.get("/error-list", (req, res, next) => {
-    const result = repository.findMany();
+  router.get("/error-list", async (req, res, next) => {
+    const result = await repository.findMany();
 
     res.status(200).json({
       statusCode: 200,
@@ -157,11 +157,11 @@ function Controller() {
     }
   });
 
-  router.post("/errors/resolve", (req, res, next) => {
+  router.post("/errors/resolve", async (req, res, next) => {
     try {
       const { id } = req.body;
 
-      const resolvedError = repository.resolve(+id);
+      const resolvedError = await repository.resolve(id);
 
       return resolvedError;
     } catch (error) {
@@ -169,10 +169,27 @@ function Controller() {
     }
   });
 
-  router.post("/errors/re-solution", (req, res, next) => {
+  router.post("/errors/re-solution", async (req, res, next) => {
+    // const { type, solution, feedback } = req.body;
+    const { id, feedback } = req.body;
+    const doc = await repository.findOneById(id);
+    const type = doc.type;
+    const solution = doc.solution;
+    const reSolution = await getSolutionFromGPT(
+      type,
+      stack +
+        "과 같은 오류가 있을 때 너가 알려 준" +
+        solution +
+        "은 잘못됐어 다른 해결책을 줄래?" +
+        feedback +
+        "이 반영되도록 알려줘"
+    );
+
     res.status(200).json({
       statusCode: 200,
-      message: "solution을 다시 받는 api",
+      data: {
+        solution: reSolution,
+      },
     });
   });
 

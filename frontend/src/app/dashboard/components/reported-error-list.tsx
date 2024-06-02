@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Flex, Table, TextArea } from "@radix-ui/themes";
+import { Badge, Button, Flex, Table, Text, TextArea } from "@radix-ui/themes";
 import {
   ReportedError,
   reSolutionError,
@@ -63,6 +63,10 @@ function filterResolvedStatus(
 
 export default function ReportedErrorList() {
   const data = useFilteredErrorList();
+
+  if (data.length === 0) {
+    return <Text>에러가 없습니다.</Text>;
+  }
 
   const headers = (Object.keys(data[0]) as ErrorKeys).filter((c) =>
     tableKeys.includes(c)
