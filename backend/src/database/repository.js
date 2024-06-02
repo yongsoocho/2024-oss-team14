@@ -10,10 +10,7 @@ class Repository {
 
   connect() {
     const url = "mongodb://localhost:27017";
-    const client = new MongoClient(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const client = new MongoClient(url);
     const db = client.db("oss");
     const collection = db.collection("test");
     // const collection = db.collection("dev");
@@ -75,14 +72,29 @@ class Repository {
 }
 
 const r = new Repository();
-console.log("save ", r.save("t", "e", "s", "t"));
-console.log("resolve ", r.resolve("665c02d4a82372cb03952070"));
-console.log("findMany ", r.findMany());
-console.log("findOneById ", r.findOneById("665c02d4a82372cb03952070"));
-console.log("findOneByQueryWhereStack ", r.findOneByQueryWhereStack("hi"));
+console.log(
+  "save ",
+  r.save("t", "e", "s", "t").then((res) => console.log(res))
+);
+console.log(
+  "resolve ",
+  r.resolve("665c02d4a82372cb03952070").then((res) => console.log(res))
+);
+console.log(
+  "findMany ",
+  r.findMany().then((res) => console.log(res))
+);
+console.log(
+  "findOneById ",
+  r.findOneById("665c02d4a82372cb03952070").then((res) => console.log(res))
+);
+console.log(
+  "findOneByQueryWhereStack ",
+  r.findOneByQueryWhereStack("hi").then((res) => console.log(res))
+);
 console.log(
   "findOneByQueryWhereSolution ",
-  r.findOneByQueryWhereSolution("hi")
+  r.findOneByQueryWhereSolution("hi").then((res) => console.log(res))
 );
 
 module.exports = Repository;
