@@ -12,8 +12,8 @@ class Repository {
     const url = "mongodb://localhost:27017";
     const client = new MongoClient(url);
     const db = client.db("oss");
-    const collection = db.collection("test");
-    // const collection = db.collection("dev");
+    // const collection = db.collection("test");
+    const collection = db.collection("dev");
     // const collection = db.collection("prd");
     return collection;
   }
@@ -34,7 +34,7 @@ class Repository {
       isResolved: false,
     };
 
-    const result = await this.con.insertOne(newError);
+    this.con.insertOne(newError).then(() => newError);
     return result;
   }
 
@@ -70,31 +70,5 @@ class Repository {
     return result;
   }
 }
-
-const r = new Repository();
-console.log(
-  "save ",
-  r.save("t", "e", "s", "t").then((res) => console.log(res))
-);
-console.log(
-  "resolve ",
-  r.resolve("665c02d4a82372cb03952070").then((res) => console.log(res))
-);
-console.log(
-  "findMany ",
-  r.findMany().then((res) => console.log(res))
-);
-console.log(
-  "findOneById ",
-  r.findOneById("665c02d4a82372cb03952070").then((res) => console.log(res))
-);
-console.log(
-  "findOneByQueryWhereStack ",
-  r.findOneByQueryWhereStack("hi").then((res) => console.log(res))
-);
-console.log(
-  "findOneByQueryWhereSolution ",
-  r.findOneByQueryWhereSolution("hi").then((res) => console.log(res))
-);
 
 module.exports = Repository;
