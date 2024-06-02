@@ -12,6 +12,7 @@ import { Dialog } from "@/components/Dialog/Dialog";
 import { useLoading } from "@/hooks/useLoading";
 import { useGetSearchQuery } from "./search";
 import { ResolvedStatus, useGetResolvedFilter } from "./DropdownFilter";
+import { delay } from "@/utils/delay";
 
 function extractKeys<T extends Record<string, unknown>>(
   obj: T,
@@ -161,8 +162,8 @@ function RePromptButton({ errorId }: { errorId: number }) {
         confirmButtonTitle="Re-Prompt"
         title="message to ChatGPT"
         description="더 좋은 답변을 받기 위해서 메시지를 추가해주세요"
-        onConfirm={() => {
-          startLoading(
+        onConfirm={async () => {
+          await startLoading(
             (async () => {
               await reSolutionError({ errorId, promptMessage: value });
               await refetch();
@@ -170,6 +171,7 @@ function RePromptButton({ errorId }: { errorId: number }) {
             })()
           );
         }}
+        closeOnConfirm={true}
       >
         <TextArea value={value} onChange={(e) => setValue(e.target.value)} />
       </Dialog>

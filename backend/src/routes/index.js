@@ -139,7 +139,7 @@ function Controller() {
       });
 
       /** pass */
-      exec(`node ${javascriptFile}`,async  async (error, stdout, stderr) => {
+      exec(`node ${javascriptFile}`, async (error, stdout, stderr) => {
         fs.writeFile(javascriptFile, "{{code}}", "utf8", (err) => {
           if (err) {
             console.error(err);
