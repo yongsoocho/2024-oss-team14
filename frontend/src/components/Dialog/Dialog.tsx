@@ -37,11 +37,9 @@ export const Dialog = ({
         <div
           style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}
         >
-          <DialogPrimitives.Close asChild>
-            <button className="Button green" onClick={() => onConfirm()}>
-              {confirmButtonTitle}
-            </button>
-          </DialogPrimitives.Close>
+          <button className="Button green" onClick={() => onConfirm()}>
+            {confirmButtonTitle}
+          </button>
         </div>
         <DialogPrimitives.Close asChild>
           <button className="IconButton" aria-label="Close">
