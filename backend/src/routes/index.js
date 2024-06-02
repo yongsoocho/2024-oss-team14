@@ -170,9 +170,22 @@ function Controller() {
   });
 
   router.post("/errors/re-solution", (req, res, next) => {
+    const { type, solution, feedback } = req.body;
+    const reSolution = getSolutionFromGPT(
+      type,
+      stack +
+        "과 같은 오류가 있을 때 너가 알려 준" +
+        solution +
+        "은 잘못됐어 다른 해결책을 줄래?" +
+        feedback +
+        "이 반영되도록 알려줘"
+    );
+
     res.status(200).json({
       statusCode: 200,
-      message: "solution을 다시 받는 api",
+      data: {
+        solution: reSolution,
+      },
     });
   });
 

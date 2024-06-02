@@ -61,7 +61,7 @@ function generatePrompt(type, message) {
  * @param {string} [message="python"|"node.js"] - 프롬프트 타입
  * @param {string} message - 에러메세지 전달
  */
-async function getSolutionFromGPT(type = "python", message) {
+export async function getSolutionFromGPT(type = "python", message) {
   const prompt = generatePrompt(type, message);
 
   try {
