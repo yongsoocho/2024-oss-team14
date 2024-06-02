@@ -59,7 +59,7 @@ export function reSolutionError({
   errorId: number;
   promptMessage: string;
 }) {
-  return client.post(`/errors/fail`, {
+  return client.post(`/errors/re-solution`, {
     errorId,
     promptMessage,
   });
