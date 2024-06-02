@@ -16,8 +16,8 @@ function Controller() {
     });
   });
 
-  router.get("/error-list", (req, res, next) => {
-    const result = repository.findMany();
+  router.get("/error-list", async (req, res, next) => {
+    const result = await repository.findMany();
 
     res.status(200).json({
       statusCode: 200,
@@ -157,11 +157,11 @@ function Controller() {
     }
   });
 
-  router.post("/errors/resolve", (req, res, next) => {
+  router.post("/errors/resolve", async (req, res, next) => {
     try {
       const { id } = req.body;
 
-      const resolvedError = repository.resolve(+id);
+      const resolvedError = await repository.resolve(id);
 
       return resolvedError;
     } catch (error) {
@@ -175,7 +175,7 @@ function Controller() {
     const doc = await repository.findOneById(id);
     const type = doc.type;
     const solution = doc.solution;
-    const reSolution = getSolutionFromGPT(
+    const reSolution = await getSolutionFromGPT(
       type,
       stack +
         "과 같은 오류가 있을 때 너가 알려 준" +
