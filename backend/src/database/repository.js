@@ -26,7 +26,7 @@ class Repository {
   async save(message, statusCode, stack, solution, type = "python") {
     const newError = {
       project: "[OSS payment 팀] 결제",
-      tags, // "python" | "node"
+      tags: type, // "python" | "node"
       message: message ?? "internal server error",
       statusCode: statusCode ?? 500,
       stack: stack ?? "fail to reference",
@@ -42,6 +42,14 @@ class Repository {
     const result = await this.con.updateOne(
       { _id: new ObjectId(id) },
       { $set: { isResolved: true } }
+    );
+    return result;
+  }
+
+  async updateSolution(id, solution) {
+    const result = await this.con.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { solution } }
     );
     return result;
   }
