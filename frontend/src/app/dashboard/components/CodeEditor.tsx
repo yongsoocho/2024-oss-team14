@@ -21,6 +21,7 @@ function CodeEditor({ editorRef }: { editorRef: React.MutableRefObject<any> }) {
 export function CodeEditorWithDialog() {
   const editorRef = useRef<any>(null);
   const refetchErrorList = useGetReportedErrorListQuery().refetch;
+
   return (
     <>
       <Dialog
