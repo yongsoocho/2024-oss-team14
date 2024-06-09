@@ -21,7 +21,7 @@ function Controller() {
       const d = distance(message, e.message, { caseSensitive: false });
       console.log(d);
       if (Number(d) > 0.65) {
-        existSolution = e.soluction;
+        existSolution = e.solution;
         return { solution: existSolution, recycle: true };
       }
     });
