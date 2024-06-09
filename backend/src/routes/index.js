@@ -19,11 +19,13 @@ function Controller() {
     let existSolution = null;
     errorList.forEach((e) => {
       const d = distance(message, e.message, { caseSensitive: false });
+      console.log(d);
       if (Number(d) > 0.65) {
         existSolution = e.soluction;
         return { solution: existSolution, recycle: true };
       }
     });
+    console.log(existSolution);
 
     if (existSolution) {
       return { solution: existSolution, recycle: true };
