@@ -73,6 +73,8 @@ async function isProgrammingQuestion(question, context) {
   return answer === "yes";
 }
 
+async function getReSolution() {}
+
 /**
  * @function chatgpt에서 솔루션을 가져옵니다.
  * @param {string} [message="python"|"node"] - 프롬프트 타입
@@ -161,4 +163,6 @@ class CustomError extends Error {
 module.exports = {
   getSolutionFromGPT,
   CustomError,
+  getReSolution,
+  isProgrammingQuestion,
 };

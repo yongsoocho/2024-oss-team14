@@ -1,5 +1,9 @@
 const { Router } = require("express");
-const { CustomError, getSolutionFromGPT } = require("../pipe/error");
+const {
+  CustomError,
+  getSolutionFromGPT,
+  isProgrammingQuestion,
+} = require("../pipe/error");
 const Repository = require("../database/repository");
 const { exec } = require("child_process");
 const path = require("path");
@@ -150,18 +154,13 @@ function Controller() {
   router.post("/errors/re-solution", async (req, res, next) => {
     const { id, feedback } = req.body;
     const doc = await repository.findOneById(id);
-    const type = doc.type;
-    const solution = doc.solution;
-    const stack = doc.stack;
-    const reSolution = await getSolutionFromGPT(
-      type,
-      stack +
-        "과 같은 오류가 있을 때 너가 알려 준" +
-        solution +
-        "은 잘못됐어 다른 해결책을 줄래?" +
-        feedback +
-        "이 반영되도록 알려줘"
-    );
+    const isRelated = isProgrammingQuestion(feedback, doc);
+    if (isRelated == "no")
+      return res.status(400).json({
+        statusCode: 400,
+        data: "The feedback is not a development-related question.",
+      });
+    /** to be */ const reSolution = await repository.getReSolution();
     await repository.updateSolution(id, reSolution);
 
     return res.status(200).json({
