@@ -10,7 +10,7 @@ const PORT = 8000;
 /** Middlewares */
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://2024-oss-team14.pages.dev/",
+  "https://2024-oss-team14.pages.dev",
 ];
 app.use(
   cors({
