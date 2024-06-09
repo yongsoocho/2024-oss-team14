@@ -40,7 +40,7 @@ function useFilteredErrorList() {
 
   return useMemo(() => {
     return filterResolvedStatus(filterQuery(data, searchQuery), resolvedFilter);
-  }, [searchQuery, resolvedFilter]);
+  }, [searchQuery, resolvedFilter, data]);
 }
 function filterQuery<T extends unknown>(arr: T[], searchQuery: string) {
   return arr.filter((el) => JSON.stringify(el).includes(searchQuery));
