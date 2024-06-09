@@ -4,6 +4,7 @@ const Repository = require("../database/repository");
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
+const distance = require("jaro-winkler");
 
 function Controller() {
   const router = Router();
@@ -11,17 +12,20 @@ function Controller() {
 
   async function getSolution({ message, type, stack }) {
     const errorList = await repository.findMany();
-    const existOne = errorList.find(
-      (e) => e.message === message && e.type === type
-    );
-    const isExist = existOne != null;
+    const existSolution = null;
+    errorList.forEach((e) => {
+      const d = distance(message, e.message, { caseSensitive: false });
+      if (Number(d) > 0.65) {
+        existSolution = e.soluction;
+        return existSolution;
+      }
+    });
 
-    if (isExist === true) {
-      return existOne.solution;
+    if (existSolution) {
+      return existSolution;
     }
 
     const newSolution = await getSolutionFromGPT(type, stack);
-
     return newSolution;
   }
 
@@ -104,8 +108,8 @@ function Controller() {
           });
         }
 
-        return res.status(202).json({
-          statusCode: 202,
+        return res.status(200).json({
+          statusCode: 200,
           data: stdout,
         });
       });
@@ -120,7 +124,10 @@ function Controller() {
 
       const resolvedError = await repository.resolve(id);
 
-      return resolvedError;
+      return res.status(200).json({
+        statusCode: 200,
+        data: resolvedError,
+      });
     } catch (error) {
       next(error);
     }
@@ -142,7 +149,7 @@ function Controller() {
     );
     await repository.updateSolution(id, reSolution);
 
-    res.status(200).json({
+    return res.status(200).json({
       statusCode: 200,
       data: {
         solution: reSolution,
