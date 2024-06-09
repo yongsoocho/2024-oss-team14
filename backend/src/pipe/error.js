@@ -62,14 +62,27 @@ function generatePrompt(type, message) {
 }
 
 async function isProgrammingQuestion(question, context) {
-  const response = await openai.createCompletion({
+  const response = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: "새로운 f",
+      },
+      {
+        role: "user",
+        content: "feedback!",
+      },
+      {
+        role: "assistant",
+        content: "기존 것들",
+      },
+    ],
     model: "gpt-3.5-turbo",
-    prompt: `Is the following question related to this context? Answer "yes" or "no":\n\n question:${question}\ncontext:${context}`,
-    max_tokens: 5,
+    max_tokens: 400,
     temperature: 0.0,
   });
 
-  const answer = response.data.choices[0].text.trim().toLowerCase();
+  const answer = response.choices[0].message.content;
   return answer === "yes";
 }
 
