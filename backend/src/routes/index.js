@@ -17,16 +17,16 @@ function Controller() {
       const d = distance(message, e.message, { caseSensitive: false });
       if (Number(d) > 0.65) {
         existSolution = e.soluction;
-        return existSolution;
+        return { solution: existSolution, recycle: true };
       }
     });
 
     if (existSolution) {
-      return existSolution;
+      return { solution: existSolution, recycle: true };
     }
 
     const newSolution = await getSolutionFromGPT(type, stack);
-    return newSolution;
+    return { solution: newSolution, recycle: false };
   }
 
   router.get("/", (req, res, next) => {
@@ -83,12 +83,19 @@ function Controller() {
 
         /** to be */
         if (error) {
-          const solution = await getSolution({
+          const { solution, recycle } = await getSolution({
             message: error.message,
             type: "python",
             stack: stderr,
           });
-          await repository.save(error.message, 500, stderr, solution, "python");
+          await repository.save(
+            error.message,
+            500,
+            stderr,
+            solution,
+            "python",
+            recycle
+          );
           return res.status(500).json({
             statusCode: 500,
             data: stderr,
@@ -96,12 +103,19 @@ function Controller() {
         }
 
         if (stderr) {
-          const solution = await getSolution({
+          const { solution, recycle } = await getSolution({
             message: stderr,
             type: "python",
             stack: stderr,
           });
-          await repository.save(stderr, 500, stderr, solution, "python");
+          await repository.save(
+            stderr,
+            500,
+            stderr,
+            solution,
+            "python",
+            recycle
+          );
           return res.status(500).json({
             statusCode: 500,
             data: stderr,

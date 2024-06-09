@@ -23,7 +23,14 @@ class Repository {
     console.log(result);
   }
 
-  async save(message, statusCode, stack, solution, type = "python") {
+  async save(
+    message,
+    statusCode,
+    stack,
+    solution,
+    type = "python",
+    recycle = false
+  ) {
     const newError = {
       project: "[OSS payment 팀] 결제",
       tags: type, // "python" | "node"
@@ -32,6 +39,7 @@ class Repository {
       stack: stack ?? "fail to reference",
       solution: solution ?? "-",
       isResolved: false,
+      recycle,
     };
 
     const result = await this.con.insertOne(newError).then(() => newError);
