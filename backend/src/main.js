@@ -28,9 +28,11 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  console.log(`Path: ${req.path}`);
-  console.log("Body:", req.body);
+app.use((req, _, next) => {
+  if (req.path.trim() != "/") {
+    console.log(`Path: ${req.path}`);
+    console.log("Body:", req.body);
+  }
   next();
 });
 

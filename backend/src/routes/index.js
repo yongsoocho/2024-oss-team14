@@ -138,6 +138,7 @@ function Controller() {
     const doc = await repository.findOneById(id);
     const type = doc.type;
     const solution = doc.solution;
+    const stack = doc.stack;
     const reSolution = await getSolutionFromGPT(
       type,
       stack +
