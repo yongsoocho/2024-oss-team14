@@ -34,7 +34,7 @@ class Repository {
       isResolved: false,
     };
 
-    this.con.insertOne(newError).then(() => newError);
+    const result = await this.con.insertOne(newError).then(() => newError);
     return result;
   }
 
