@@ -33,6 +33,7 @@ export type ReportedError = {
   stack: string;
   solution: string;
   isResolved: boolean;
+  recycle: boolean;
 };
 async function getReportedErrorList() {
   return client.get<ServerResponse<ReportedError[]>>("/error-list");

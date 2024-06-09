@@ -94,7 +94,12 @@ export default function ReportedErrorList() {
                   if (k === "solution") {
                     return (
                       <Table.Cell key={index}>
-                        <div>{JSON.stringify(v)}</div>
+                        <div>
+                          {d.recycle === true && (
+                            <Badge>기존 응답 재활용</Badge>
+                          )}
+                          {JSON.stringify(v)}
+                        </div>
                         {d.isResolved !== true ? (
                           <Flex gap={"2"}>
                             <ResolveButton errorId={d._id} />
