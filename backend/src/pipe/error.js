@@ -68,7 +68,7 @@ async function getSolutionFromGPT(type = "python", message) {
     const response = await openai.chat.completions.create({
       messages: prompt,
       model: "gpt-3.5-turbo",
-      max_tokens: 100,
+      max_tokens: 400,
       // stream: true,
     });
     // for await (const chunk of stream) {
