@@ -25,8 +25,13 @@ function generatePrompt(type, message) {
     return [
       {
         role: "system",
-        content:
-          "Your role is to help developers solve programming errors or issue.",
+        content: `Your role is to help developers solve programming errors or issue.
+          [Instruction]
+          First, think the cause of this error. 
+          Second, provide the technology keyword of cause.
+          Thrid, provide the code example according to the cause.
+          Fourth, summarize the cause, keyword and solution.
+          `,
       },
       {
         role: "user",
@@ -54,6 +59,18 @@ function generatePrompt(type, message) {
   } else {
     throw new CustomError("prompt generate fail", 400, null);
   }
+}
+
+async function isProgrammingQuestion(question, context) {
+  const response = await openai.createCompletion({
+    model: "gpt-3.5-turbo",
+    prompt: `Is the following question related to this context? Answer "yes" or "no":\n\n question:${question}\ncontext:${context}`,
+    max_tokens: 5,
+    temperature: 0.0,
+  });
+
+  const answer = response.data.choices[0].text.trim().toLowerCase();
+  return answer === "yes";
 }
 
 /**
