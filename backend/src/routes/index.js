@@ -45,6 +45,7 @@ function Controller() {
     try {
       const { code } = req.body;
       const pythonFile = path.join(__dirname, "test.py");
+      const bashFile = path.join(__dirname, "test.sh");
 
       fs.readFile(pythonFile, "utf8", (err, data) => {
         if (err) {
@@ -65,7 +66,7 @@ function Controller() {
       });
 
       /** pass */
-      exec(`python ${pythonFile}`, async (error, stdout, stderr) => {
+      exec(`${bashFile}`, async (error, stdout, stderr) => {
         fs.writeFile(pythonFile, "{{code}}", "utf8", (err) => {
           if (err) {
             throw new CustomError(
