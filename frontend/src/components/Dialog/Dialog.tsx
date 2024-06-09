@@ -6,6 +6,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import "./style.css";
 import { Button } from "@radix-ui/themes";
 import { useLoading } from "@/hooks/useLoading";
+import { css } from "@emotion/react";
 
 export const Dialog = ({
   triggerComponent,

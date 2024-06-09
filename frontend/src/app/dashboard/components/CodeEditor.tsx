@@ -1,13 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import Editor from "@monaco-editor/react";
 import { Dialog } from "@/components/Dialog/Dialog";
-import { Button, Flex, IconButton, Spinner } from "@radix-ui/themes";
-import { sendPyCode, useGetReportedErrorListQuery } from "../remote";
+import { IconButton } from "@radix-ui/themes";
+import {
+  ConsoleResult,
+  sendPyCode,
+  useGetReportedErrorListQuery,
+} from "../remote";
 
 function CodeEditor({ editorRef }: { editorRef: React.MutableRefObject<any> }) {
   return (
     <Editor
+      width={"500px"}
       height="500px"
       defaultLanguage="python"
       defaultValue={`print("Hello World")`}
@@ -21,6 +26,8 @@ function CodeEditor({ editorRef }: { editorRef: React.MutableRefObject<any> }) {
 export function CodeEditorWithDialog() {
   const editorRef = useRef<any>(null);
   const refetchErrorList = useGetReportedErrorListQuery().refetch;
+
+  const [result, setResult] = useState<ConsoleResult | null>(null);
 
   return (
     <>
@@ -36,14 +43,47 @@ export function CodeEditorWithDialog() {
         onConfirm={async () => {
           const code = editorRef.current.getValue();
 
-          await sendPyCode({ code });
-          await refetchErrorList();
+          try {
+            const result = (await sendPyCode({ code })).data;
+
+            setResult(result);
+          } catch (e: any) {
+            if (e?.response?.data) {
+              setResult(e.response?.data);
+              await refetchErrorList();
+            }
+          }
         }}
       >
-        <CodeEditor editorRef={editorRef} />
+        <div style={{ display: "flex" }}>
+          <CodeEditor editorRef={editorRef} />
+          {result == null ? (
+            <div></div>
+          ) : (
+            <Result statusCode={result?.statusCode} result={result.data} />
+          )}
+        </div>
       </Dialog>
     </>
   );
+}
+
+function Result({
+  statusCode,
+  result,
+}: {
+  statusCode: number;
+  result: string;
+}) {
+  if (statusCode === 500) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+        <div style={{ color: "red" }}>{result}</div>
+        <div>창을 닫고, 해결책을 확인해보세요</div>
+      </div>
+    );
+  }
+  return <div>{result}</div>;
 }
 
 function OpenButton() {
