@@ -43,7 +43,8 @@ class Repository {
       { _id: new ObjectId(id) },
       { $set: { isResolved: true } }
     );
-    return result;
+    const newRecord = await this.findOneById(id);
+    return newRecord;
   }
 
   async updateSolution(id, solution) {
