@@ -55,7 +55,7 @@ class Repository {
   }
 
   async findMany(page = 1) {
-    const result = await this.con.find({}).toArray();
+    const result = (await this.con.find({}).toArray()).reverse();
     return result;
   }
 
