@@ -96,7 +96,7 @@ export default function ReportedErrorList() {
                       <Table.Cell key={index}>
                         <div>
                           {d.recycle === true && (
-                            <Badge>기존 응답 재활용</Badge>
+                            <Badge color="blue">기존 응답 재활용</Badge>
                           )}
                           {JSON.stringify(v)}
                         </div>
