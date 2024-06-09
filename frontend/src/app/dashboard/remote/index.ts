@@ -65,6 +65,10 @@ export function reSolutionError({
   });
 }
 
+export type ConsoleResult = { statusCode: number; data: string };
+
 export function sendPyCode({ code }: { code: string }) {
-  return client.post(`/errors/py`, { code });
+  return client.post<ConsoleResult>(`/errors/py`, {
+    code,
+  });
 }

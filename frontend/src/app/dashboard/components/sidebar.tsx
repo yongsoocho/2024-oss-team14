@@ -13,18 +13,19 @@ export default function Sidebar() {
     <div
       style={{
         backgroundColor: "#271a37",
-        height: "100vh",
+        minHeight: "100vh",
         minWidth: "320px",
         width: "20%",
-        paddingTop: 20,
-        paddingLeft: 20,
+        position: "relative",
       }}
     >
-      <ProjectInfo />
-      <Box height={"40px"} />
-      <SSRSafeSuspense fallback={null}>
-        <ProjectList />
-      </SSRSafeSuspense>
+      <div style={{ position: "fixed", top: "20px", left: "20px" }}>
+        <ProjectInfo />
+        <Box height={"40px"} />
+        <SSRSafeSuspense fallback={null}>
+          <ProjectList />
+        </SSRSafeSuspense>
+      </div>
     </div>
   );
 }
