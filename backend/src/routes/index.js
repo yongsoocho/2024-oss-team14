@@ -160,7 +160,17 @@ function Controller() {
         statusCode: 400,
         data: "The feedback is not a development-related question.",
       });
-    /** to be */ const reSolution = await repository.getReSolution();
+    /** to be */
+
+    const reSolution = await getSolutionFromGPT(
+      type,
+      stack +
+        "과 같은 오류가 있을 때 너가 알려 준" +
+        solution +
+        "은 잘못됐어 다른 해결책을 줄래?" +
+        feedback +
+        "이 반영되도록 알려줘"
+    );
     await repository.updateSolution(id, reSolution);
 
     return res.status(200).json({
