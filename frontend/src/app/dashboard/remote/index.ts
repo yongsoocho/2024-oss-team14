@@ -25,7 +25,7 @@ type ServerResponse<T> = {
 };
 
 export type ReportedError = {
-  id: number;
+  _id: string;
   project: string;
   tags: string[];
   message: string;
@@ -48,7 +48,7 @@ export function useGetReportedErrorListQuery() {
   });
 }
 
-export function resolveError({ errorId }: { errorId: number }) {
+export function resolveError({ errorId }: { errorId: string }) {
   return client.post(`/errors/resolve`, { id: errorId });
 }
 
@@ -56,7 +56,7 @@ export function reSolutionError({
   errorId,
   promptMessage,
 }: {
-  errorId: number;
+  errorId: string;
   promptMessage: string;
 }) {
   return client.post(`/errors/re-solution`, {

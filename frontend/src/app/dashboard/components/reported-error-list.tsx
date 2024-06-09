@@ -40,7 +40,7 @@ function useFilteredErrorList() {
 
   return useMemo(() => {
     return filterResolvedStatus(filterQuery(data, searchQuery), resolvedFilter);
-  }, [searchQuery, resolvedFilter]);
+  }, [searchQuery, resolvedFilter, data]);
 }
 function filterQuery<T extends unknown>(arr: T[], searchQuery: string) {
   return arr.filter((el) => JSON.stringify(el).includes(searchQuery));
@@ -72,6 +72,7 @@ export default function ReportedErrorList() {
   const headers = (Object.keys(data[0]) as ErrorKeys).filter((c) =>
     tableKeys.includes(c)
   );
+
   return (
     <div>
       <Table.Root variant="surface">
@@ -88,7 +89,7 @@ export default function ReportedErrorList() {
             const c = extractKeys(d, tableKeys);
             const entries = Object.entries(c);
             return (
-              <Table.Row key={d.id}>
+              <Table.Row key={d._id}>
                 {entries.map(([k, v], index) => {
                   if (k === "solution") {
                     return (
@@ -96,8 +97,8 @@ export default function ReportedErrorList() {
                         <div>{JSON.stringify(v)}</div>
                         {d.isResolved !== true ? (
                           <Flex gap={"2"}>
-                            <ResolveButton errorId={d.id} />
-                            <RePromptButton errorId={d.id} />
+                            <ResolveButton errorId={d._id} />
+                            <RePromptButton errorId={d._id} />
                           </Flex>
                         ) : (
                           <Badge color="green">Resolved!</Badge>
@@ -125,7 +126,7 @@ export default function ReportedErrorList() {
   );
 }
 
-function ResolveButton({ errorId }: { errorId: number }) {
+function ResolveButton({ errorId }: { errorId: string }) {
   const refetch = useGetReportedErrorListQuery().refetch;
   const [loading, startLoading] = useLoading();
 
@@ -147,7 +148,7 @@ function ResolveButton({ errorId }: { errorId: number }) {
   );
 }
 
-function RePromptButton({ errorId }: { errorId: number }) {
+function RePromptButton({ errorId }: { errorId: string }) {
   const [value, setValue] = useState("");
   const refetch = useGetReportedErrorListQuery().refetch;
   const [loading, startLoading] = useLoading();
