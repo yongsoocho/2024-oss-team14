@@ -53,7 +53,7 @@ function OpenButton() {
       radius="full"
       size="4"
       style={{
-        position: "absolute",
+        position: "fixed",
         right: "24px",
         bottom: "24px",
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
