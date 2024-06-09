@@ -16,7 +16,7 @@ function Controller() {
 
   async function getSolution({ message, type, stack }) {
     const errorList = await repository.findMany();
-    const existSolution = null;
+    let existSolution = null;
     errorList.forEach((e) => {
       const d = distance(message, e.message, { caseSensitive: false });
       if (Number(d) > 0.65) {
