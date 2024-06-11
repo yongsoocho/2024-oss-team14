@@ -198,7 +198,7 @@ function RePromptButton({ errorId }: { errorId: string }) {
                   }
                   const type = e.response?.data.data as string;
                   if (type === "no") {
-                    alert("해당 에러와 관련 없는 대화입니다.");
+                    alert("정책에 위배되거나, 개발과 관련 없는 대화입니다.");
                     return;
                   }
                   if (type !== "no") {
