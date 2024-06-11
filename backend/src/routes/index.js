@@ -20,7 +20,7 @@ function Controller() {
     errorList.forEach((e) => {
       const d = distance(message, e.message, { caseSensitive: false });
       console.log(d);
-      if (Number(d) > 0.65) {
+      if (Number(d) > 0.925) {
         existSolution = e.solution;
         return { solution: existSolution, recycle: true };
       }
@@ -157,10 +157,10 @@ function Controller() {
     const { id, feedback } = req.body;
     const doc = await repository.findOneById(id);
     const isRelated = isProgrammingQuestion(feedback, doc);
-    if (isRelated == "no")
+    if (isRelated != "yes")
       return res.status(400).json({
         statusCode: 400,
-        data: "The feedback is not a development-related question.",
+        data: isRelated,
       });
     /** to be */
 

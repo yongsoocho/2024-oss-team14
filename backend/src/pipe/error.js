@@ -27,7 +27,7 @@ function generatePrompt(type, message) {
         role: "system",
         content: `Your role is to help developers solve programming errors or issue.
           [Instruction]
-          First, think the cause of this error. 
+          First, think the cause of this error.
           Second, provide the technology keyword of cause.
           Thrid, provide the code example according to the cause.
           Fourth, summarize the cause, keyword and solution.
@@ -66,15 +66,21 @@ async function isProgrammingQuestion(question, context) {
     messages: [
       {
         role: "system",
-        content: "새로운 f",
+        content: `
+        You are an AI assistant.
+        Your main goal is to resolve issues in Python development while ensuring the safety and well-being of your users.
+        If you receive a question related to hate, violence, or self-harm, respond with "moderation" and do not provide any additional information or engage in further discussion on these topics.
+        If you receive any other question, respond with "no" and do not provide any additional information.
+        If you receive a question related to Python, respond with "yes".
+        `,
       },
       {
         role: "user",
-        content: "feedback!",
+        content: question,
       },
       {
         role: "assistant",
-        content: "기존 것들",
+        content: context.solution,
       },
     ],
     model: "gpt-3.5-turbo",
@@ -83,7 +89,7 @@ async function isProgrammingQuestion(question, context) {
   });
 
   const answer = response.choices[0].message.content;
-  return answer === "yes";
+  return answer;
 }
 
 async function getReSolution() {}
