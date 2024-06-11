@@ -115,7 +115,7 @@ export default function ReportedErrorList() {
                   if (index === 0) {
                     return (
                       <Table.RowHeaderCell key={index}>
-                        {JSON.stringify(v)}
+                        <Txt>{JSON.stringify(v)}</Txt>
                       </Table.RowHeaderCell>
                     );
                   }
@@ -129,6 +129,19 @@ export default function ReportedErrorList() {
         </Table.Body>
       </Table.Root>
     </div>
+  );
+}
+
+function Txt({ children }: { children: string }) {
+  return (
+    <span>
+      {children.split("\n").map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ))}
+    </span>
   );
 }
 
