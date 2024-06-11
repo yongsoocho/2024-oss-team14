@@ -13,6 +13,7 @@ import { useLoading } from "@/hooks/useLoading";
 import { useGetSearchQuery } from "./search";
 import { ResolvedStatus, useGetResolvedFilter } from "./DropdownFilter";
 import { delay } from "@/utils/delay";
+import { AxiosError } from "axios";
 
 function extractKeys<T extends Record<string, unknown>>(
   obj: T,
@@ -171,7 +172,14 @@ function RePromptButton({ errorId }: { errorId: string }) {
         onConfirm={async () => {
           await startLoading(
             (async () => {
-              await reSolutionError({ errorId, promptMessage: value });
+              try {
+                await reSolutionError({ errorId, promptMessage: value });
+              } catch (e) {
+                if (e instanceof AxiosError && "response" in e) {
+                  console.log("e", e);
+                  alert(e.response?.data);
+                }
+              }
               await refetch();
               setValue("");
             })()
