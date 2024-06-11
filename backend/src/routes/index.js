@@ -165,7 +165,7 @@ function Controller() {
     /** to be */
 
     const reSolution = await getSolutionFromGPT(
-      type,
+      "python",
       stack +
         "과 같은 오류가 있을 때 너가 알려 준" +
         solution +
