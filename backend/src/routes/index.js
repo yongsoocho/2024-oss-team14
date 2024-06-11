@@ -9,6 +9,8 @@ const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 const distance = require("jaro-winkler");
+const axios = require("axios");
+const config = require("../config/config.json");
 
 function Controller() {
   const router = Router();
@@ -186,6 +188,26 @@ function Controller() {
   router.get("/test/gpt", async (_, res, __) => {
     const result = await getSolutionFromGPT("python", "out of index");
     return res.status(200).json(result);
+  });
+
+  router.post("/test/moder", async (req, res, __) => {
+    try {
+      const { data } = await axios.post(
+        "https://api.openai.com/v1/moderations",
+        {
+          input: req.body.question,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${config["OPENAI_API_KEY"]}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return router;

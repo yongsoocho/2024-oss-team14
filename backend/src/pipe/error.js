@@ -1,7 +1,7 @@
 const { OpenAI } = require("openai");
 const config = require("../config/config.json");
 const openai = new OpenAI({ apiKey: config["OPENAI_API_KEY"] });
-const axios = require("axios")
+const axios = require("axios");
 
 /**
  * @param {string} [message="python"|"node"] - 프롬프트 타입
@@ -63,7 +63,7 @@ function generatePrompt(type, message) {
 }
 
 async function isProgrammingQuestion(question, context) {
-  const check = await axios.post(
+  const { data: check } = await axios.post(
     "https://api.openai.com/v1/moderations",
     {
       input: question,
