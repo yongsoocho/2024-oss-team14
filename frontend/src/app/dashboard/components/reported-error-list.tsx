@@ -177,7 +177,19 @@ function RePromptButton({ errorId }: { errorId: string }) {
               } catch (e) {
                 if (e instanceof AxiosError && "response" in e) {
                   console.log("e", e);
-                  alert(e.response?.data);
+                  if (e.status !== 400) {
+                    alert("알 수 없는 에러가 발생했어요");
+                    return;
+                  }
+                  const type = e.response?.data.data as string;
+                  if (type === "no") {
+                    alert("해당 에러와 관련 없는 대화입니다.");
+                    return;
+                  }
+                  if (type !== "no") {
+                    alert("정책에 위배되는 대화 내용입니다.");
+                    return;
+                  }
                 }
               }
               await refetch();
