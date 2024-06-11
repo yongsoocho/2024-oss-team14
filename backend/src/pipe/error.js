@@ -1,6 +1,7 @@
 const { OpenAI } = require("openai");
 const config = require("../config/config.json");
 const openai = new OpenAI({ apiKey: config["OPENAI_API_KEY"] });
+const axios = require("axios")
 
 /**
  * @param {string} [message="python"|"node"] - 프롬프트 타입

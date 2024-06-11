@@ -156,7 +156,7 @@ function Controller() {
   router.post("/errors/re-solution", async (req, res, next) => {
     const { id, feedback } = req.body;
     const doc = await repository.findOneById(id);
-    const isRelated = isProgrammingQuestion(feedback, doc);
+    const isRelated = await isProgrammingQuestion(feedback, doc);
     if (isRelated != "yes")
       return res.status(400).json({
         statusCode: 400,
