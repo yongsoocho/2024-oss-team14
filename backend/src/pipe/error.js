@@ -63,22 +63,22 @@ function generatePrompt(type, message) {
 }
 
 async function isProgrammingQuestion(question, context) {
-  const { data: check } = await axios.post(
-    "https://api.openai.com/v1/moderations",
-    {
-      input: question,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${config["OPENAI_API_KEY"]}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  if (check.results[0].flagged) {
-    return check.results[0].categories.map((e) => !!e);
-  }
+  // const { data: check } = await axios.post(
+  //   "https://api.openai.com/v1/moderations",
+  //   {
+  //     input: question,
+  //   },
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${config["OPENAI_API_KEY"]}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // );
+  // console.log(check.results[0]);
+  // if (check.results[0].flagged) {
+  //   return check.results[0].categories.map((e) => !!e);
+  // }
 
   const response = await openai.chat.completions.create({
     messages: [
@@ -87,7 +87,8 @@ async function isProgrammingQuestion(question, context) {
         content: `
         You are an AI assistant.
         Your main goal is to resolve issues in Python development while ensuring the safety and well-being of your users.
-        If you receive a question related to Python, respond with "yes".
+        If you receive a question related to hate, violence, or self-harm, respond with "moderation" and do not provide any additional information or engage in further discussion on these topics.
+        If you receive a question related to development or programming, respond with "yes".
         If you receive any other question, respond with "no" and do not provide any additional information.
         `,
       },
