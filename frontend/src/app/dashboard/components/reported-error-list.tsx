@@ -190,7 +190,7 @@ function RePromptButton({ errorId }: { errorId: string }) {
               } catch (e) {
                 if (e instanceof AxiosError && "response" in e) {
                   console.log("e", e);
-                  if (e.status !== 400) {
+                  if (e.response?.status !== 400) {
                     alert("알 수 없는 에러가 발생했어요");
                     return;
                   }
