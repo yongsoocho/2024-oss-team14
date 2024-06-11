@@ -156,7 +156,7 @@ function Controller() {
   });
 
   router.post("/errors/re-solution", async (req, res, next) => {
-    const { id, feedback, stack } = req.body;
+    const { id, feedback } = req.body;
     const doc = await repository.findOneById(id);
     const isRelated = await isProgrammingQuestion(feedback, doc);
     if (isRelated != "yes")
@@ -168,9 +168,9 @@ function Controller() {
 
     const reSolution = await getSolutionFromGPT(
       "python",
-      stack +
+      doc.stack +
         "과 같은 오류가 있을 때 너가 알려 준" +
-        solution +
+        doc.solution +
         "은 잘못됐어 다른 해결책을 줄래?" +
         feedback +
         "이 반영되도록 알려줘"
