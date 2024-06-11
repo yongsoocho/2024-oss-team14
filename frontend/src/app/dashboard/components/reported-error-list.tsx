@@ -115,12 +115,14 @@ export default function ReportedErrorList() {
                   if (index === 0) {
                     return (
                       <Table.RowHeaderCell key={index}>
-                        <Txt>{JSON.stringify(v)}</Txt>
+                        {JSON.stringify(v)}
                       </Table.RowHeaderCell>
                     );
                   }
                   return (
-                    <Table.Cell key={index}>{JSON.stringify(v)}</Table.Cell>
+                    <Table.Cell key={index}>
+                      <Txt>{JSON.stringify(v)}</Txt>
+                    </Table.Cell>
                   );
                 })}
               </Table.Row>
