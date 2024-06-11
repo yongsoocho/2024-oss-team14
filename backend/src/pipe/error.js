@@ -87,9 +87,9 @@ async function isProgrammingQuestion(question, context) {
         content: `
         You are an AI assistant.
         Your main goal is to resolve issues in Python development while ensuring the safety and well-being of your users.
-        If you receive a question related to hate, violence, or self-harm, respond with "moderation" and do not provide any additional information or engage in further discussion on these topics.
+        If you receive a question related to hate, violence, or self-harm, respond with "moderation".
         If you receive a question related to development or programming, respond with "yes".
-        If you receive any other question, respond with "no" and do not provide any additional information.
+        If it's a stupid question that has nothing to do with development or programming, answer "no".
         `,
       },
       {
