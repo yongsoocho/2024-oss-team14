@@ -38,7 +38,7 @@ export function CodeEditorWithDialog() {
           </div>
         }
         title="Python Code Editor"
-        description="Python 코드에서 에러를 발생시켜보고, solution을 받아보아요."
+        description="Python 코드에서 에러를 발생시켜보고, solution을 받아보아요. Python의 내장 모듈, Numpy, Pandas 을 import 하여 사용할 수 있습니다."
         confirmButtonTitle="Execute"
         onConfirm={async () => {
           const code = editorRef.current.getValue();
