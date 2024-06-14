@@ -12,8 +12,8 @@ import { Dialog } from "@/components/Dialog/Dialog";
 import { useLoading } from "@/hooks/useLoading";
 import { useGetSearchQuery } from "./search";
 import { ResolvedStatus, useGetResolvedFilter } from "./DropdownFilter";
-import { delay } from "@/utils/delay";
 import { AxiosError } from "axios";
+import Markdown from "markdown-to-jsx";
 
 function extractKeys<T extends Record<string, unknown>>(
   obj: T,
@@ -99,7 +99,13 @@ export default function ReportedErrorList() {
                           {d.recycle === true && (
                             <Badge color="blue">기존 응답 재활용</Badge>
                           )}
-                          {JSON.stringify(v)}
+                          <Markdown
+                            options={{
+                              wrapper: "article",
+                            }}
+                          >
+                            {v as string}
+                          </Markdown>
                         </div>
                         {d.isResolved !== true ? (
                           <Flex gap={"2"}>
