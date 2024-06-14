@@ -22,7 +22,7 @@ function Controller() {
     errorList.forEach((e) => {
       const d = distance(message, e.message, { caseSensitive: false });
       console.log(d);
-      if (Number(d) > 0.925) {
+      if (Number(d) > 0.99) {
         existSolution = e.solution;
         return { solution: existSolution, recycle: true };
       }
