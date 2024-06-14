@@ -54,6 +54,9 @@ export default function Search() {
           }}
           onClick={() => {
             setSearchQuery("");
+            if (inputRef.current) {
+              inputRef.current.value = "";
+            }
           }}
         >
           <svg
